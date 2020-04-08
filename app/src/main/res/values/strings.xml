@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SearchMovieLocalCache</string>
+    <string name="app_name">Search Movie </string>
+    <string name="no_more_results">No more results!</string>
 </resources>
