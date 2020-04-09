@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.example.searchmovielocalcache.AppExecutors
 import com.example.searchmovielocalcache.requests.responses.ApiResponse
+import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
 
 
 // CacheObject: Type for the Resource data. (ResultType)

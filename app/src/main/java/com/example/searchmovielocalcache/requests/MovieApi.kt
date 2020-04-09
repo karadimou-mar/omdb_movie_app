@@ -1,5 +1,7 @@
 package com.example.searchmovielocalcache.requests
 
+import androidx.lifecycle.LiveData
+import com.example.searchmovielocalcache.requests.responses.ApiResponse
 import com.example.searchmovielocalcache.requests.responses.MovieDetailResponse
 import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
 import retrofit2.Call
@@ -13,13 +15,13 @@ interface MovieApi {
         @Query("s") title: String,
         @Query("apikey") apikey: String,
         @Query("page") page: Int
-    ): Call<MovieSearchResponse>
+    ): LiveData<ApiResponse<MovieSearchResponse>>
 
     @GET("/?plot=full")
     fun getMovieDetails(
         @Query("t") title: String,
         @Query("apikey") apikey: String
-    ): Call<MovieDetailResponse>
+    ): LiveData<ApiResponse<MovieDetailResponse>>
 
 
 

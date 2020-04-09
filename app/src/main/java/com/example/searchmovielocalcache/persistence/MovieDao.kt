@@ -22,7 +22,7 @@ interface MovieDao {
 
 
     // Custom update queries so timestamp don't get removed
-    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = poster, imdbId = :imdbId")
+    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster, imdbId = :imdbId")
     fun updateMovie(title: String, year: String, type: String, poster: String, imdbId: String)
 
     @Query("UPDATE ratings SET source = :source, value = :value" )
