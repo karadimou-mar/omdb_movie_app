@@ -8,45 +8,45 @@ class MovieDetailResponse(
 
     @SerializedName("Rated")
     @Expose
-    val rated: String = "",
+    var rated: String = "",
 
     @SerializedName("Runtime")
     @Expose
-    val runtime: String = "",
+    var runtime: String = "",
 
     @SerializedName("Genre")
     @Expose
-    val genre: String = "",
+    var genre: String = "",
 
     @SerializedName("Released")
     @Expose
-    val released: String = "",
+    var released: String = "",
 
     @SerializedName("Plot")
     @Expose
-    val plot: String = "",
+    var plot: String = "",
 
     @SerializedName("Director")
     @Expose
-    val director: String = "",
+    var director: String = "",
 
     @SerializedName("Writer")
     @Expose
-    val writer: String = "",
+    var writer: String = "",
 
     @SerializedName("Actors")
     @Expose
-    val actor: String = "",
+    var actor: String = "",
 
     @SerializedName("Metascore")
     @Expose
-    val metascore: String = "",
+    var metascore: String = "",
 
     @SerializedName("imdbRating")
     @Expose
-    val imdbRating: String = "",
+    var imdbRating: String = "",
 
     @SerializedName("Ratings")
     @Expose
-    val rating: List<Rating> = emptyList()
+    var rating: List<Rating> = emptyList()
 )
