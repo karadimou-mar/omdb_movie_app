@@ -1,7 +1,9 @@
 package com.example.searchmovielocalcache
 
+import android.os.Handler
+import android.os.Looper
+import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
 
 class AppExecutors {
 
@@ -19,9 +21,24 @@ class AppExecutors {
         }
     }
 
-    private val mNetworkIO = Executors.newScheduledThreadPool(3)
+    private val mDiskIO: Executor = Executors.newSingleThreadExecutor()
 
-    fun networkIO(): ScheduledExecutorService{
-        return mNetworkIO
+    private val mMainThreadExecutor: Executor = MainThreadExecutor()
+
+
+    fun diskIO(): Executor? {
+        return mDiskIO
+    }
+
+    fun mainThread(): Executor? {
+        return mMainThreadExecutor
+    }
+
+    private class MainThreadExecutor : Executor {
+        private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
+
+        override fun execute(command: Runnable) {
+            mainThreadHandler.post(command)
+        }
     }
 }
