@@ -1,6 +1,7 @@
 package com.example.searchmovielocalcache.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.searchmovielocalcache.AppExecutors
 import com.example.searchmovielocalcache.models.Movie
@@ -21,10 +22,10 @@ import com.example.searchmovielocalcache.utils.Resource
 
 class MovieRepository(context: Context) {
 
-    private var recipeDao: MovieDao
+    private var movieDao: MovieDao
 
     init {
-        recipeDao = MovieDatabase.getInstance(context)!!.getMovieDao()
+        movieDao = MovieDatabase.getInstance(context)!!.getMovieDao()
     }
 
     companion object {
@@ -41,12 +42,28 @@ class MovieRepository(context: Context) {
         }
     }
 
-    fun searchRecipesApi(search: String, page: Int): LiveData<Resource<List<Movie>>> {
+    fun searchMoviesApi(search: String, page: Int): LiveData<Resource<List<Movie>>> {
 
         return object :
         NetworkBoundResource<List<Movie>, MovieSearchResponse>(AppExecutors.getInstance()){
             override fun saveCallResult(item: MovieSearchResponse) {
 
+                val movies: Array<Movie> = Array(item.movies.size){Movie()}
+                var index = 0
+
+                for (rowId: Long in movieDao.insertMovies(item.movies.toTypedArray())){
+                    if (rowId == -1L){
+                       Log.d(TAG, "saveCallResult: CONFLICT.. This recipe is already in cache")
+                        movieDao.updateMovie(
+                            movies[index].title,
+                            movies[index].year,
+                            movies[index].poster,
+                            movies[index].type,
+                            movies[index].imdbID
+                        )
+                    }
+                    index++
+                }
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean {
@@ -54,12 +71,11 @@ class MovieRepository(context: Context) {
             }
 
             override fun loadFromDb(): LiveData<List<Movie>> {
-                return recipeDao.searchMovies(search,page)
+                return movieDao.searchMovies(search,page)
             }
 
             override fun createCall(): LiveData<ApiResponse<MovieSearchResponse>> {
-               return ServiceGenerator.getMovieApi()
-                   .getMovies(search,API_KEY,page)
+               return ServiceGenerator.getMovieApi().searchMovies(search,API_KEY,page.toString())
             }
 
         }.asLiveData()

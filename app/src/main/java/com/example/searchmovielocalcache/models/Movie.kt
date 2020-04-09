@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "movies")
 data class Movie(
 
-    @PrimaryKey
-    @NotNull
+    @PrimaryKey(autoGenerate = true)
     var id: Int = 0 ,
 
     @ColumnInfo(name = "title")

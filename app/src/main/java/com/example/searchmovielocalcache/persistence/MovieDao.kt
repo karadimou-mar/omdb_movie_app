@@ -31,7 +31,7 @@ interface MovieDao {
     @Query("UPDATE movie_detail SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore, imdbRating = :imdbRating, rating = :rating")
     fun updateMovieDetails(rated: String, runtime: String, genre: String, released: String, plot: String, director: String, writer: String, actor: String, metascore: String, imdbRating: String, rating: List<Rating>)
 
-    @Query("SELECT * FROM movies WHERE title LIKE '%' || :search || '%' ORDER BY year DESC LIMIT (:page * 30)")
+    @Query("SELECT * FROM movies WHERE title LIKE '%' || :search || '%' ORDER BY year DESC LIMIT (:page * 10)")
     fun searchMovies(search: String, page: Int): LiveData<List<Movie>>
 
     @Query("SELECT * FROM movie_detail WHERE detailId = :detailId")

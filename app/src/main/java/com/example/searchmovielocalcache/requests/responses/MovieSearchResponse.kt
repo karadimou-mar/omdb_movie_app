@@ -4,7 +4,7 @@ import com.example.searchmovielocalcache.models.Movie
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class MovieSearchResponse(
+data class MovieSearchResponse(
 
     @SerializedName("totalResults")
     @Expose

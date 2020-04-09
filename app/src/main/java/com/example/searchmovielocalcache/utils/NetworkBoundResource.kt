@@ -13,6 +13,7 @@ import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
 
 // CacheObject: Type for the Resource data. (ResultType)
 // RequestObject: Type for the API response. (RequestType)
+@Suppress("UNCHECKED_CAST")
 abstract class NetworkBoundResource<CacheObject, RequestObject>
 constructor(private var appExecutors: AppExecutors) {
 

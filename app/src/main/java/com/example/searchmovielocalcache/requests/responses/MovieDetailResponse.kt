@@ -4,7 +4,7 @@ import com.example.searchmovielocalcache.models.Rating
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class MovieDetailResponse(
+data class MovieDetailResponse(
 
     @SerializedName("Rated")
     @Expose
@@ -48,5 +48,9 @@ class MovieDetailResponse(
 
     @SerializedName("Ratings")
     @Expose
-    var rating: List<Rating> = emptyList()
+    var rating: List<Rating> = emptyList(),
+
+    @SerializedName("Response")
+    @Expose
+    var response: String = ""
 )

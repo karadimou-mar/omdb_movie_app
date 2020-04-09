@@ -1,5 +1,6 @@
 package com.example.searchmovielocalcache.utils
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.searchmovielocalcache.requests.responses.ApiResponse
 import retrofit2.Call
@@ -26,6 +27,7 @@ class LiveDataCallAdapter<R>(private val responseType: Type):
 
                     override fun onResponse(call: Call<R>, response: Response<R>) {
                         postValue(apiResponse.create(response))
+                        //Log.d("BOOM", "${response.body()}")
                     }
 
                 })

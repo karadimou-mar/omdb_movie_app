@@ -72,6 +72,9 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
                 .setDefaultRequestOptions(requestOptions)
                 .load(mMovies[position].poster)
                 .into((holder as MovieViewHolder).image)
+
+            (holder as MovieViewHolder).title.text = mMovies[position].title
+            (holder as MovieViewHolder).year.text = mMovies[position].year
         }
 
     }
@@ -94,20 +97,48 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
         }
     }
 
-    private fun setQueryExhausted(){
-
+     fun setQueryExhausted(){
+         hideLoading()
+         val exhaustedMovie = Movie()
+         exhaustedMovie.title = "EXHAUSTED"
+         mMovies.add(exhaustedMovie)
+         notifyDataSetChanged()
     }
 
-    private fun hideLoading(){
-
+    fun hideLoading(){
+        if (isLoading()){
+            if (mMovies[0].title == "LOADING"){
+                mMovies.removeAt(mMovies.size -1 )
+            }else if (mMovies[mMovies.size - 1].title == "LOADING"){
+                mMovies.removeAt(mMovies.size - 1)
+            }
+        }
     }
 
-    private fun displayLoading(){
+     fun displayLoading(){
+         if (!isLoading()){
+             val movie = Movie()
+             movie.title = "LOADING"
+             mMovies.add(movie)
+             notifyDataSetChanged()
+         }
+    }
 
+    fun displayOnlyLoading(){
+        clearMoviesList()
+        val movie = Movie()
+        movie.title = "LOADING"
+        mMovies.add(movie)
+        notifyDataSetChanged()
     }
 
     private fun isLoading(): Boolean{
         return false
+    }
+
+    private fun clearMoviesList(){
+        mMovies.clear()
+        notifyDataSetChanged()
     }
 
 

@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
-        },4000)
+        },12)
 
         val anim: Animation = AnimationUtils.loadAnimation(this,R.anim.splash_animation)
         iv_splash.startAnimation(anim)

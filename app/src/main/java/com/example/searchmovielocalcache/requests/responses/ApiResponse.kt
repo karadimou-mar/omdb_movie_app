@@ -5,6 +5,10 @@ import java.io.IOException
 
 open class ApiResponse<T> {
 
+    companion object{
+        const val TAG = "ApiResponse"
+    }
+
 
     /**
      * Generic success response from api
@@ -41,13 +45,28 @@ open class ApiResponse<T> {
         if (response.isSuccessful) {
             val body: T = response.body()!!
 
+            if (body is MovieSearchResponse){
+                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieSearchResponse)){
+                    val errorMessage = "Api key is invalid or expired!"
+                    return ApiErrorResponse(errorMessage)
+                }
+            }
+
+            if (body is MovieDetailResponse) {
+                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieDetailResponse)){
+                    val errorMessage = "Api key is invalid or expired"
+                    return ApiErrorResponse(errorMessage)
+                }
+            }
+
             // 204 code is empty response
             if (body == null || response.code() == 204) {
                 return ApiEmptyResponse()
             } else {
                 return ApiSuccessResponse(body)
             }
-        } else {
+        }
+        else {
             val errorMsg: String
             errorMsg = try {
                 response.errorBody().toString()

@@ -4,7 +4,9 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
 import com.example.searchmovielocalcache.R
+import com.example.searchmovielocalcache.models.Movie
 
 class MovieViewHolder(itemView: View, private val onMovieListener: OnMovieListener):
     RecyclerView.ViewHolder(itemView),View.OnClickListener {
@@ -20,4 +22,15 @@ class MovieViewHolder(itemView: View, private val onMovieListener: OnMovieListen
     override fun onClick(v: View?) {
         onMovieListener.onMovieClick(adapterPosition)
     }
+
+//    fun onBind(movie: Movie){
+//
+//        requestManager
+//            .load(movie.poster)
+//            .into(image)
+//
+//        title.text = movie.title
+//        year.text = movie.year
+//
+//    }
 }
