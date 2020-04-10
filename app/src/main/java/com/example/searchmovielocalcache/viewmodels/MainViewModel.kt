@@ -61,6 +61,13 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun searchNextPagee(){
+        if (!isPerformingQuery && !isQueryExhausted){
+            mPageNumber++
+            executeSearch()
+        }
+    }
+
     private fun executeSearch() {
 
         isPerformingQuery = true
@@ -110,6 +117,18 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
         })
 
+    }
+
+    fun setViewInitImage(){
+        viewState?.value = ViewState.IMAGE
+    }
+
+    fun cancelSearchRequest(){
+        if (isPerformingQuery){
+            cancelRequest = true
+            isPerformingQuery = false
+            mPageNumber = 1
+        }
     }
 
 

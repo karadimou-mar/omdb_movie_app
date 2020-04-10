@@ -11,8 +11,12 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "movies")
 data class Movie(
 
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0 ,
+//    @PrimaryKey(autoGenerate = true)
+//    val id: Int = 0 ,
+
+//    @PrimaryKey
+//    @NotNull
+//    val id: String = "",
 
     @ColumnInfo(name = "title")
     @SerializedName("Title")
@@ -22,13 +26,15 @@ data class Movie(
     @SerializedName("Year")
     var year: String = "",
 
-    @ColumnInfo(name = "imdbID")
+    @PrimaryKey
+    @NotNull
     @SerializedName("imdbID")
     var imdbID: String = "",
 
     @ColumnInfo(name = "type")
     @SerializedName("Type")
     var type: String = "",
+
 
     @ColumnInfo(name = "poster")
     @SerializedName("Poster")
@@ -39,18 +45,16 @@ data class Movie(
 
 ): Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readInt()
-    )
-
+    ) {
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
         parcel.writeString(title)
         parcel.writeString(year)
         parcel.writeString(imdbID)
@@ -73,5 +77,3 @@ data class Movie(
         }
     }
 }
-
-

@@ -22,10 +22,10 @@ interface MovieDao {
 
 
     // Custom update queries so timestamp don't get removed
-    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster, imdbId = :imdbId")
-    fun updateMovie(title: String, year: String, type: String, poster: String, imdbId: String)
+    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster WHERE imdbId = :imdbId")
+    fun updateMovie( title: String, year: String, type: String, poster: String, imdbId: String)
 
-    @Query("UPDATE ratings SET source = :source, value = :value" )
+    @Query("UPDATE ratings SET source = :source, value = :value")
     fun updateRating(source: String, value: String)
 
     @Query("UPDATE movie_detail SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore, imdbRating = :imdbRating, rating = :rating")
@@ -36,6 +36,8 @@ interface MovieDao {
 
     @Query("SELECT * FROM movie_detail WHERE detailId = :detailId")
     fun getMovie(detailId: String): LiveData<MovieDetail>
+
+
 
 
 

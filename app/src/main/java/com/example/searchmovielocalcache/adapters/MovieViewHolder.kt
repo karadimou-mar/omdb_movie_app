@@ -8,7 +8,7 @@ import com.bumptech.glide.RequestManager
 import com.example.searchmovielocalcache.R
 import com.example.searchmovielocalcache.models.Movie
 
-class MovieViewHolder(itemView: View, private val onMovieListener: OnMovieListener):
+class MovieViewHolder(itemView: View, private val onMovieListener: OnMovieListener, val requestManager: RequestManager):
     RecyclerView.ViewHolder(itemView),View.OnClickListener {
 
     val image: AppCompatImageView = itemView.findViewById(R.id.movie_image)
@@ -23,14 +23,14 @@ class MovieViewHolder(itemView: View, private val onMovieListener: OnMovieListen
         onMovieListener.onMovieClick(adapterPosition)
     }
 
-//    fun onBind(movie: Movie){
-//
-//        requestManager
-//            .load(movie.poster)
-//            .into(image)
-//
-//        title.text = movie.title
-//        year.text = movie.year
-//
-//    }
+    fun onBind(movie: Movie){
+
+        requestManager
+            .load(movie.poster)
+            .into(image)
+
+        title.text = movie.title
+        year.text = movie.year
+
+    }
 }

@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.searchmovielocalcache.R
 import com.example.searchmovielocalcache.models.Movie
 
-class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
+class MovieRecyclerAdapter(onMovieListener: OnMovieListener, val requestManager: RequestManager) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -33,7 +34,7 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
 
             MOVIE_TYPE -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.layout_movie_list_item,parent,false)
-                return MovieViewHolder(view, mOnMovieListener)
+                return MovieViewHolder(view, mOnMovieListener, requestManager)
             }
             LOADING_TYPE -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_list_item,parent,false)
@@ -50,7 +51,7 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
 
             else -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.layout_movie_list_item,parent,false)
-                return MovieViewHolder(view, mOnMovieListener)
+                return MovieViewHolder(view, mOnMovieListener, requestManager)
             }
         }
     }
@@ -59,22 +60,16 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
         return mMovies.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val itemViewType = getItemViewType(position)
 
         if (itemViewType == MOVIE_TYPE) {
-            val requestOptions: RequestOptions = RequestOptions()
-                .placeholder(R.drawable.white_background)
-                .error(R.drawable.white_background)
-
-            Glide.with(holder.itemView.context)
-                .setDefaultRequestOptions(requestOptions)
-                .load(mMovies[position].poster)
-                .into((holder as MovieViewHolder).image)
-
-            (holder as MovieViewHolder).title.text = mMovies[position].title
-            (holder as MovieViewHolder).year.text = mMovies[position].year
+            (holder as MovieViewHolder).onBind(mMovies[position])
         }
 
     }
@@ -113,6 +108,7 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
                 mMovies.removeAt(mMovies.size - 1)
             }
         }
+        notifyDataSetChanged()
     }
 
      fun displayLoading(){
@@ -140,6 +136,7 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener) :
         mMovies.clear()
         notifyDataSetChanged()
     }
+
 
 
     fun setMovies(movies: MutableList<Movie>){

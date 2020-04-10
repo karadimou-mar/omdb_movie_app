@@ -29,7 +29,7 @@ class MovieRepository(context: Context) {
     }
 
     companion object {
-        const val TAG = "RecipeRepository"
+        const val TAG = "MovieRepository"
 
 
         private var instance: MovieRepository? = null
@@ -64,6 +64,7 @@ class MovieRepository(context: Context) {
                     }
                     index++
                 }
+
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean {
