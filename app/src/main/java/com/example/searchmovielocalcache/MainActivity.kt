@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.example.recipesearchengine.util.VerticalSpacingItemDecorator
 import com.example.searchmovielocalcache.adapters.MovieRecyclerAdapter
 import com.example.searchmovielocalcache.adapters.OnMovieListener
@@ -124,10 +126,20 @@ class MainActivity : BaseActivity(), OnMovieListener {
     }
 
     private fun initRecyclerView() {
+        val viewPreloader: ViewPreloadSizeProvider<String> = ViewPreloadSizeProvider()
+
+        mMovieAdapter = MovieRecyclerAdapter(this, initGlide(), viewPreloader)
+
+        val preloader: RecyclerViewPreloader<String> = RecyclerViewPreloader(
+            Glide.with(this),
+            mMovieAdapter, viewPreloader,
+            30
+        )
+
         val itemDecorator = VerticalSpacingItemDecorator(30)
         mRecyclerView.addItemDecoration(itemDecorator)
 
-        mMovieAdapter = MovieRecyclerAdapter(this, initGlide())
+
 
         val linearLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = linearLayoutManager
@@ -142,6 +154,8 @@ class MainActivity : BaseActivity(), OnMovieListener {
                 }
             }
         })
+
+        mRecyclerView.addOnScrollListener(preloader)
 
         mRecyclerView.adapter = mMovieAdapter
 

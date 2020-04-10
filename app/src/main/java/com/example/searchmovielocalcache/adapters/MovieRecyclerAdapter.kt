@@ -1,18 +1,26 @@
 package com.example.searchmovielocalcache.adapters
 
-import android.util.Log
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.ListPreloader
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.example.searchmovielocalcache.R
 import com.example.searchmovielocalcache.models.Movie
+import java.util.*
+import kotlin.collections.ArrayList
 
-class MovieRecyclerAdapter(onMovieListener: OnMovieListener, val requestManager: RequestManager) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MovieRecyclerAdapter(
+    onMovieListener: OnMovieListener,
+    val requestManager: RequestManager,
+    val viewPreloadSizeProvider: ViewPreloadSizeProvider<String>
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    ListPreloader.PreloadModelProvider<String> {
 
     companion object {
         private const val TAG = "MovieRecyclerAdapter"
@@ -33,25 +41,40 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener, val requestManager:
         when (viewType) {
 
             MOVIE_TYPE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_movie_list_item,parent,false)
-                return MovieViewHolder(view, mOnMovieListener, requestManager)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_movie_list_item, parent, false)
+                return MovieViewHolder(
+                    view,
+                    mOnMovieListener,
+                    requestManager,
+                    viewPreloadSizeProvider
+                )
             }
             LOADING_TYPE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_list_item,parent,false)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_loading_list_item, parent, false)
                 return LoadingViewHolder(view)
             }
             EXHAUSTED_TYPE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_search_exhausted, parent, false)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_search_exhausted, parent, false)
                 return SearchExhaustedViewHolder(view)
             }
             IMAGE_TYPE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_initial_image_item, parent, false)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_initial_image_item, parent, false)
                 return InitImageViewHolder(view)
             }
 
             else -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_movie_list_item,parent,false)
-                return MovieViewHolder(view, mOnMovieListener, requestManager)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_movie_list_item, parent, false)
+                return MovieViewHolder(
+                    view,
+                    mOnMovieListener,
+                    requestManager,
+                    viewPreloadSizeProvider
+                )
             }
         }
     }
@@ -92,35 +115,35 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener, val requestManager:
         }
     }
 
-     fun setQueryExhausted(){
-         hideLoading()
-         val exhaustedMovie = Movie()
-         exhaustedMovie.title = "EXHAUSTED"
-         mMovies.add(exhaustedMovie)
-         notifyDataSetChanged()
+    fun setQueryExhausted() {
+        hideLoading()
+        val exhaustedMovie = Movie()
+        exhaustedMovie.title = "EXHAUSTED"
+        mMovies.add(exhaustedMovie)
+        notifyDataSetChanged()
     }
 
-    fun hideLoading(){
-        if (isLoading()){
-            if (mMovies[0].title == "LOADING"){
-                mMovies.removeAt(mMovies.size -1 )
-            }else if (mMovies[mMovies.size - 1].title == "LOADING"){
+    fun hideLoading() {
+        if (isLoading()) {
+            if (mMovies[0].title == "LOADING") {
+                mMovies.removeAt(mMovies.size - 1)
+            } else if (mMovies[mMovies.size - 1].title == "LOADING") {
                 mMovies.removeAt(mMovies.size - 1)
             }
         }
         notifyDataSetChanged()
     }
 
-     fun displayLoading(){
-         if (!isLoading()){
-             val movie = Movie()
-             movie.title = "LOADING"
-             mMovies.add(movie)
-             notifyDataSetChanged()
-         }
+    fun displayLoading() {
+        if (!isLoading()) {
+            val movie = Movie()
+            movie.title = "LOADING"
+            mMovies.add(movie)
+            notifyDataSetChanged()
+        }
     }
 
-    fun displayOnlyLoading(){
+    fun displayOnlyLoading() {
         clearMoviesList()
         val movie = Movie()
         movie.title = "LOADING"
@@ -128,36 +151,47 @@ class MovieRecyclerAdapter(onMovieListener: OnMovieListener, val requestManager:
         notifyDataSetChanged()
     }
 
-    private fun isLoading(): Boolean{
+    private fun isLoading(): Boolean {
         return false
     }
 
-    private fun clearMoviesList(){
+    private fun clearMoviesList() {
         mMovies.clear()
         notifyDataSetChanged()
     }
 
 
-
-    fun setMovies(movies: MutableList<Movie>){
+    fun setMovies(movies: MutableList<Movie>) {
         mMovies = movies
         notifyDataSetChanged()
     }
 
     fun getSelectedMovie(position: Int): Movie? {
-            if (mMovies.size > 0) {
-                return mMovies[position]
-            }
-            return null
-      }
+        if (mMovies.size > 0) {
+            return mMovies[position]
+        }
+        return null
+    }
 
-    fun displaySearchImage(){
+    fun displaySearchImage() {
         val list: MutableList<Movie> = ArrayList()
         val movie = Movie()
         movie.title = "IMAGE"
         list.add(movie)
         mMovies = list
         notifyDataSetChanged()
+    }
+
+    override fun getPreloadItems(position: Int): MutableList<String> {
+        val url = mMovies[position].poster
+        if (TextUtils.isEmpty(url)){
+            return Collections.emptyList()
+        }
+        return Collections.singletonList(url)
+    }
+
+    override fun getPreloadRequestBuilder(item: String): RequestBuilder<*>? {
+        return requestManager.load(item)
     }
 
 }
