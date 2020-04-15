@@ -48,8 +48,8 @@ class MovieDetailActivity : BaseActivity() {
 
     }
 
-    private fun subscribeObservers(title: String) {
-        mMovieDetailViewModel.searchSingleMovieApi(title)
+    private fun subscribeObservers(id: String) {
+        mMovieDetailViewModel.searchSingleMovieApi(id)
             .observe(this, object : Observer<Resource<Movie>> {
                 override fun onChanged(movieDetailResource: Resource<Movie>?) {
 
@@ -84,7 +84,7 @@ class MovieDetailActivity : BaseActivity() {
                                         TAG,
                                         "onChanged: ERROR message: ${movieDetailResource.message}"
                                     )
-                                    showParent()
+                                    //showParent()
                                     showProgressBar(false)
                                     //set the widgets - in  progress
 
@@ -114,7 +114,7 @@ class MovieDetailActivity : BaseActivity() {
 
             mMovieTitle.text = "${movie.title}  (${movie.year})"
             mImdbScore.text = "IMDb:\n ${movie.imdbRating}"
-            mCriticScore.text = "Metacritic:\n ${movie.metascore}"
+            mCriticScore.text = "Metacritic:\n ${movie.metascore}/100"
             setMovieRTScore(movie)
             setMoviePlot(movie)
             setMovieWriter(movie)
@@ -204,7 +204,7 @@ class MovieDetailActivity : BaseActivity() {
             val movie: Movie = intent.getParcelableExtra("movie")!!
             Log.d(TAG, "getIncomingIntent: ${movie.title}")
             //searchSingleMovieApi(movie.title)
-            subscribeObservers(movie.title)
+            subscribeObservers(movie.imdbID)
         }
     }
 

@@ -83,9 +83,6 @@ class MovieRecyclerAdapter(
         return mMovies.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 

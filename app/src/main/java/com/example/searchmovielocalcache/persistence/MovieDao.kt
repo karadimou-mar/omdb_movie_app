@@ -23,19 +23,22 @@ interface MovieDao {
     fun insertMovieDetails(movie: Movie)
 
     // Custom update queries so timestamp don't get removed
-    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster, plot = :plot WHERE imdbId = :imdbId")
-    fun updateMovie( title: String, year: String, type: String, poster: String, imdbId: String, plot: String)
+    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster, plot = :plot WHERE imdbID = :imdbID")
+    fun updateMovie( title: String, year: String, type: String, poster: String, imdbID: String, plot: String)
 
 //    @Query("UPDATE ratings SET source = :source, value = :value")
 //    fun updateRating(source: String, value: String)
 
-    @Query("UPDATE movies SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore,  rating = :rating, imdbRating = :imdbRating WHERE title = :title")
+    @Query("UPDATE movies SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore, rating = :rating, imdbRating =:imdbRating, title= :title WHERE imdbID= :id")
     fun updateMovieDetails(title:String,  rated: String, runtime: String, genre: String, released: String, plot: String, director: String,
-                           writer: String, actor: String, metascore: String, rating: List<Rating>, imdbRating: String)
+                           writer: String, actor: String, metascore: String, rating: List<Rating>, imdbRating: String, id: String)
 
-    @Query("SELECT * FROM movies WHERE title LIKE '%' || :search || '%' ORDER BY year DESC LIMIT (:page * 10)")
+    @Query("SELECT * FROM movies WHERE title LIKE '%' || :search || '%' ORDER BY imdbrating DESC LIMIT (:page * 10)")
     fun searchMovies(search: String, page: Int): LiveData<List<Movie>>
 
-    @Query("SELECT * FROM movies WHERE title = :title")
-    fun getMovieByTitle(title: String): LiveData<Movie>
+    @Query("SELECT * FROM movies WHERE imdbID = :id")
+    fun getMovieByID(id: String): LiveData<Movie>
+
+    @Query("UPDATE movies SET timestamp = :timestamp WHERE imdbID = :imdbID")
+    fun updateMovieTimestamp(timestamp: Int, imdbID: String)
 }

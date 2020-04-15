@@ -1,6 +1,5 @@
 package com.example.searchmovielocalcache.utils
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.searchmovielocalcache.requests.responses.ApiResponse
 import retrofit2.Call
@@ -12,6 +11,10 @@ import java.lang.reflect.Type
 class LiveDataCallAdapter<R>(private val responseType: Type):
     CallAdapter<R, LiveData<ApiResponse<R>>> {
 
+    companion object{
+        const val TAG = "LiveDataCallAdapter"
+    }
+
 
     override fun adapt(call: Call<R>): LiveData<ApiResponse<R>> {
         return object: LiveData<ApiResponse<R>>(){
@@ -19,7 +22,7 @@ class LiveDataCallAdapter<R>(private val responseType: Type):
                 super.onActive()
 
                 val apiResponse: ApiResponse<R> = ApiResponse()
-
+git 
                 call.enqueue(object: Callback<R> {
                     override fun onFailure(call: Call<R>, t: Throwable) {
                         postValue(apiResponse.create(t))
@@ -27,7 +30,6 @@ class LiveDataCallAdapter<R>(private val responseType: Type):
 
                     override fun onResponse(call: Call<R>, response: Response<R>) {
                         postValue(apiResponse.create(response))
-                        Log.d("BOOMmmmm", "${response.body()}")
 
 
                     }

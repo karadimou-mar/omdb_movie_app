@@ -15,7 +15,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     private var movieRepository: MovieRepository = MovieRepository.getInstance(application)!!
 
-    fun searchSingleMovieApi(title: String): LiveData<Resource<Movie>>{
-        return movieRepository.searchSingleMovieApi(title)
+    fun searchSingleMovieApi(id: String): LiveData<Resource<Movie>>{
+        return movieRepository.searchSingleMovieApi(id)
     }
 }

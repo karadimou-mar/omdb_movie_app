@@ -18,8 +18,8 @@ interface MovieApi {
     ): LiveData<ApiResponse<MovieSearchResponse>>
 
     @GET("/?plot=full")
-    fun getMovieByTitle(
-        @Query("t") title: String,
+    fun getMovieByID(
+        @Query("i") id: String,
         @Query("apikey") apikey: String
     ): LiveData<ApiResponse<MovieDetailResponse>>
 

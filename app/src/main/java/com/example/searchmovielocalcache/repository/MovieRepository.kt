@@ -12,6 +12,7 @@ import com.example.searchmovielocalcache.requests.responses.MovieDetailResponse
 import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
 import com.example.searchmovielocalcache.requests.responses.ServiceGenerator
 import com.example.searchmovielocalcache.utils.Constants.API_KEY
+import com.example.searchmovielocalcache.utils.Constants.TEST_REFRESH_TIME
 import com.example.searchmovielocalcache.utils.NetworkBoundResource
 import com.example.searchmovielocalcache.utils.Resource
 
@@ -84,11 +85,13 @@ class MovieRepository(context: Context) {
         }.asLiveData()
     }
 
-    fun searchSingleMovieApi(title: String): LiveData<Resource<Movie>> {
+    fun searchSingleMovieApi(id: String): LiveData<Resource<Movie>> {
 
         return object :
             NetworkBoundResource<Movie, MovieDetailResponse>(AppExecutors.getInstance()) {
             override fun saveCallResult(item: MovieDetailResponse) {
+
+                movieDao.updateMovieTimestamp((System.currentTimeMillis() / 1000).toInt(), id)
 
                 movieDao.insertMovieDetails(
                     Movie()
@@ -106,7 +109,8 @@ class MovieRepository(context: Context) {
                     item.actor,
                     item.metascore,
                     item.rating,
-                    item.imdbRating
+                    item.imdbRating,
+                    item.imdbID
                 )
 
                 Log.d(TAG, "saveCallResult2: $movieDao")
@@ -114,16 +118,30 @@ class MovieRepository(context: Context) {
 
             override fun shouldFetch(data: Movie?): Boolean {
                 Log.d(TAG, "shouldFetch2: ${data.toString()}")
+
+                val currentTime = (System.currentTimeMillis() / 1000).toInt()
+                Log.d(TAG, "shouldFetch: current time: $currentTime")
+                val lastRefresh = data?.timestamp
+                Log.d(TAG, "shouldFetch: last refresh(timestamp): $lastRefresh")
+                Log.d(TAG, "shouldFetch: it's been ${(currentTime.minus(lastRefresh!!) / 60) } minutes since this movie was refresh." +
+                        " 1 minute must elapse before refreshing.")
+
+                if (currentTime.minus(data.timestamp) >= TEST_REFRESH_TIME ){
+                    Log.d(TAG, "shouldFetch: SHOULD REFRESH MOVIE? " +true)
+                    return true
+                }
+                Log.d(TAG, "shouldFetch: SHOULD REFRESH MOVIE? " +false)
                 return false
+
             }
 
             override fun loadFromDb(): LiveData<Movie> {
-                return movieDao.getMovieByTitle(title)
+                return movieDao.getMovieByID(id)
             }
 
             override fun createCall(): LiveData<ApiResponse<MovieDetailResponse>> {
                 Log.d(TAG, "createCall2: call created")
-                return ServiceGenerator.getMovieApi().getMovieByTitle(title, API_KEY)
+                return ServiceGenerator.getMovieApi().getMovieByID(id, API_KEY)
             }
 
         }.asLiveData()

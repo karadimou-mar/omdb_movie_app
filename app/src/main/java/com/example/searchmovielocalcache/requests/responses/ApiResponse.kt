@@ -47,12 +47,12 @@ open class ApiResponse<T> {
             val body: T = response.body()!!
             Log.d("ApiResponse", "$body ")
 
-            if (body is MovieSearchResponse){
-                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieSearchResponse)){
-                    val errorMessage = "Api key is invalid or expired!"
-                    return ApiErrorResponse(errorMessage)
-                }
-            }
+//            if (body is MovieSearchResponse){
+//                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieSearchResponse)){
+//                    val errorMessage = "Api key is invalid or expired!"
+//                    return ApiErrorResponse(errorMessage)
+//                }
+//            }
 
 //            if (body is MovieDetailResponse) {
 //                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieDetailResponse)){

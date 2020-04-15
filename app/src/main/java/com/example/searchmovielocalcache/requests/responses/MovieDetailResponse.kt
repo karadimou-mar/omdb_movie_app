@@ -60,5 +60,13 @@ data class MovieDetailResponse(
 
     @SerializedName("Response")
     @Expose
-    var response: String = ""
+    var response: String = "",
+
+    @SerializedName("imdbID")
+    @Expose
+    var imdbID: String = "",
+
+    @SerializedName("Error")
+    @Expose
+    var error: String = ""
 )

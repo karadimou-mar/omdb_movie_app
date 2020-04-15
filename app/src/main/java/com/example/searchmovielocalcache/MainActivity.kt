@@ -146,6 +146,8 @@ class MainActivity : BaseActivity(), OnMovieListener {
         val linearLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = linearLayoutManager
 
+        mRecyclerView.addOnScrollListener(preloader)
+
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -156,8 +158,6 @@ class MainActivity : BaseActivity(), OnMovieListener {
                 }
             }
         })
-
-        mRecyclerView.addOnScrollListener(preloader)
 
         mRecyclerView.adapter = mMovieAdapter
 
