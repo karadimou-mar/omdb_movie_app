@@ -163,11 +163,11 @@ class MovieRecyclerAdapter(
         notifyDataSetChanged()
     }
 
-    fun getSelectedMovie(position: Int): Movie? {
-        if (mMovies.size > 0) {
+    fun getSelectedMovie(position: Int): Movie {
+        if (mMovies.isNotEmpty()) {
             return mMovies[position]
         }
-        return null
+        return Movie()
     }
 
     fun displaySearchImage() {

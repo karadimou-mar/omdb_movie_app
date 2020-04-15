@@ -66,7 +66,6 @@ open class ApiResponse<T> {
                 response.raw().body?.close()
                 return ApiEmptyResponse()
             } else {
-
                 return ApiSuccessResponse(body)
             }
 

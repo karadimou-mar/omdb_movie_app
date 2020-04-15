@@ -44,9 +44,9 @@ class MainActivity : BaseActivity(), OnMovieListener {
 
         initComponents()
         initSearchView()
-        initRecyclerView()
         subscribeObservers()
         setSupportActionBar(findViewById(R.id.toolbar))
+        initRecyclerView()
     }
 
 
