@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -87,8 +88,9 @@ class MovieDetailActivity : BaseActivity() {
                                     //showParent()
                                     showProgressBar(false)
                                     //set the widgets - in  progress
-
+                                    //setMovieProperties(movieDetailResource.data)
                                     //display error screen - in progress
+                                    displayErrorToast()
                                 }
 
                             }
@@ -114,7 +116,7 @@ class MovieDetailActivity : BaseActivity() {
 
             mMovieTitle.text = "${movie.title}  (${movie.year})"
             mImdbScore.text = "IMDb:\n ${movie.imdbRating}"
-            mCriticScore.text = "Metacritic:\n ${movie.metascore}/100"
+            mCriticScore.text = "Metacritic:\n ${movie.metascore}"
             setMovieRTScore(movie)
             setMoviePlot(movie)
             setMovieWriter(movie)
@@ -185,13 +187,22 @@ class MovieDetailActivity : BaseActivity() {
 
     }
 
-    private fun setMovieRTScore(movie: Movie?){
+    private fun displayErrorToast() {
+        Toast.makeText(
+            this, "Error retrieving information.\nPlease check your connection.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
+
+
+    private fun setMovieRTScore(movie: Movie?) {
         var count = 0
-        for (i in movie?.rating!!.indices){
-            if (movie.rating[i].source == "Rotten Tomatoes"){
+        for (i in movie?.rating!!.indices) {
+            if (movie.rating[i].source == "Rotten Tomatoes") {
                 mRottenScore.text = "Rotten Tomatoes: ${movie.rating[i].value}"
                 count++
-            }else if (count != 1){
+            } else if (count != 1) {
                 mRottenScore.text = "Rotten Tomatoes: N/A"
             }
 
@@ -207,7 +218,6 @@ class MovieDetailActivity : BaseActivity() {
             subscribeObservers(movie.imdbID)
         }
     }
-
 
 
     private fun initComponents() {

@@ -50,14 +50,14 @@ class MovieRepository(context: Context) {
             NetworkBoundResource<List<Movie>, MovieSearchResponse>(AppExecutors.getInstance()) {
             override fun saveCallResult(item: MovieSearchResponse) {
 
-                val movies: Array<Movie> = Array(item.movies.size) { Movie() }
+                val movies: Array<Movie>? = Array(item.movies.size) { Movie() }
                 var index = 0
 
                 for (rowId: Long in movieDao.insertMovies(item.movies.toTypedArray())) {
                     if (rowId == -1L) {
                         Log.d(TAG, "saveCallResult: CONFLICT.. This movie is already in cache")
                         movieDao.updateMovie(
-                            movies[index].title,
+                            movies?.get(index)!!.title,
                             movies[index].year,
                             movies[index].poster,
                             movies[index].type,
