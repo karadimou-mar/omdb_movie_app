@@ -22,7 +22,7 @@ class LiveDataCallAdapter<R>(private val responseType: Type):
                 super.onActive()
 
                 val apiResponse: ApiResponse<R> = ApiResponse()
-                call.enqueue(object: Callback<R> {
+                call.clone().enqueue(object: Callback<R> {
                     override fun onFailure(call: Call<R>, t: Throwable) {
                         postValue(apiResponse.create(t))
                     }

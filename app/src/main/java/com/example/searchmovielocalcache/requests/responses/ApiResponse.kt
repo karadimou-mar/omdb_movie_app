@@ -53,7 +53,7 @@ open class ApiResponse<T> {
 //                    return ApiErrorResponse(errorMessage)
 //                }
 //            }
-
+//
 //            if (body is MovieDetailResponse) {
 //                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieDetailResponse)){
 //                    val errorMessage = "Api key is invalid or expired"
@@ -63,10 +63,13 @@ open class ApiResponse<T> {
 
             // 204 code is empty response
             if (body == null || response.code() == 204) {
+                response.raw().body?.close()
                 return ApiEmptyResponse()
             } else {
+
                 return ApiSuccessResponse(body)
             }
+
         }
         else {
             val errorMsg: String

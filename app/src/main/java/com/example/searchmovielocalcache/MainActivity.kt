@@ -142,7 +142,6 @@ class MainActivity : BaseActivity(), OnMovieListener {
         mRecyclerView.addItemDecoration(itemDecorator)
 
 
-
         val linearLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = linearLayoutManager
 
