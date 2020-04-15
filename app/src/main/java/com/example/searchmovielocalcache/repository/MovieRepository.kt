@@ -8,6 +8,7 @@ import com.example.searchmovielocalcache.models.Movie
 import com.example.searchmovielocalcache.persistence.MovieDao
 import com.example.searchmovielocalcache.persistence.MovieDatabase
 import com.example.searchmovielocalcache.requests.responses.ApiResponse
+import com.example.searchmovielocalcache.requests.responses.MovieDetailResponse
 import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
 import com.example.searchmovielocalcache.requests.responses.ServiceGenerator
 import com.example.searchmovielocalcache.utils.Constants.API_KEY
@@ -45,21 +46,22 @@ class MovieRepository(context: Context) {
     fun searchMoviesApi(search: String, page: Int): LiveData<Resource<List<Movie>>> {
 
         return object :
-        NetworkBoundResource<List<Movie>, MovieSearchResponse>(AppExecutors.getInstance()){
+            NetworkBoundResource<List<Movie>, MovieSearchResponse>(AppExecutors.getInstance()) {
             override fun saveCallResult(item: MovieSearchResponse) {
 
-                val movies: Array<Movie> = Array(item.movies.size){Movie()}
+                val movies: Array<Movie> = Array(item.movies.size) { Movie() }
                 var index = 0
 
-                for (rowId: Long in movieDao.insertMovies(item.movies.toTypedArray())){
-                    if (rowId == -1L){
-                       Log.d(TAG, "saveCallResult: CONFLICT.. This recipe is already in cache")
+                for (rowId: Long in movieDao.insertMovies(item.movies.toTypedArray())) {
+                    if (rowId == -1L) {
+                        Log.d(TAG, "saveCallResult: CONFLICT.. This movie is already in cache")
                         movieDao.updateMovie(
                             movies[index].title,
                             movies[index].year,
                             movies[index].poster,
                             movies[index].type,
-                            movies[index].imdbID
+                            movies[index].imdbID,
+                            movies[index].plot
                         )
                     }
                     index++
@@ -72,13 +74,74 @@ class MovieRepository(context: Context) {
             }
 
             override fun loadFromDb(): LiveData<List<Movie>> {
-                return movieDao.searchMovies(search,page)
+                return movieDao.searchMovies(search, page)
             }
 
             override fun createCall(): LiveData<ApiResponse<MovieSearchResponse>> {
-               return ServiceGenerator.getMovieApi().searchMovies(search,API_KEY,page.toString())
+                return ServiceGenerator.getMovieApi().searchMovies(search, API_KEY, page.toString())
+            }
+
+        }.asLiveData()
+    }
+
+    fun searchSingleMovieApi(title: String): LiveData<Resource<Movie>> {
+
+        return object :
+            NetworkBoundResource<Movie, MovieDetailResponse>(AppExecutors.getInstance()) {
+            override fun saveCallResult(item: MovieDetailResponse) {
+
+                movieDao.insertMovieDetails(
+                    Movie()
+                )
+
+                movieDao.updateMovieDetails(
+                    item.title,
+                    item.rated,
+                    item.runtime,
+                    item.genre,
+                    item.released,
+                    item.plot,
+                    item.director,
+                    item.writer,
+                    item.actor,
+                    item.metascore,
+                    item.rating,
+                    item.imdbRating
+                )
+
+                Log.d(TAG, "saveCallResult2: $movieDao")
+            }
+
+            override fun shouldFetch(data: Movie?): Boolean {
+                Log.d(TAG, "shouldFetch2: ${data.toString()}")
+                return false
+            }
+
+            override fun loadFromDb(): LiveData<Movie> {
+                return movieDao.getMovieByTitle(title)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MovieDetailResponse>> {
+                Log.d(TAG, "createCall2: call created")
+                return ServiceGenerator.getMovieApi().getMovieByTitle(title, API_KEY)
             }
 
         }.asLiveData()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

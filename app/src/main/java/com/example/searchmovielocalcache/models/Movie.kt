@@ -5,61 +5,118 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "movies")
 data class Movie(
 
-//    @PrimaryKey(autoGenerate = true)
-//    val id: Int = 0 ,
-
-//    @PrimaryKey
-//    @NotNull
-//    val id: String = "",
-
-    @ColumnInfo(name = "title")
-    @SerializedName("Title")
-    var title: String = "",
-
-    @ColumnInfo(name = "year")
-    @SerializedName("Year")
-    var year: String = "",
-
+    @SerializedName("imdbID")
+    @Expose
     @PrimaryKey
     @NotNull
-    @SerializedName("imdbID")
     var imdbID: String = "",
 
-    @ColumnInfo(name = "type")
+    @SerializedName("Title")
+    @Expose
+    @ColumnInfo(name = "title")
+    var title: String = "",
+
+    @SerializedName("Year")
+    @Expose
+    @ColumnInfo(name = "year")
+    var year: String = "",
+
     @SerializedName("Type")
+    @Expose
+    @ColumnInfo(name = "type")
     var type: String = "",
 
-
-    @ColumnInfo(name = "poster")
     @SerializedName("Poster")
+    @Expose
+    @ColumnInfo(name = "poster")
     var poster: String = "",
+
+    @ColumnInfo(name = "rated")
+    var rated: String = "",
+
+    @ColumnInfo(name = "runtime")
+    var runtime: String = "",
+
+    @ColumnInfo(name = "genre")
+    var genre: String = "",
+
+    @ColumnInfo(name = "released")
+    var released: String = "",
+
+    @ColumnInfo(name = "plot")
+    var plot: String = "",
+
+    @ColumnInfo(name = "director")
+    var director: String = "",
+
+    @ColumnInfo(name = "writer")
+    val writer: String = "",
+
+    @ColumnInfo(name = "actor")
+    var actor: String = "",
+
+    @ColumnInfo(name ="imdbrating")
+    var imdbRating: String = "",
+
+    @ColumnInfo(name = "metascore")
+    var metascore: String = "",
+
+    @ColumnInfo(name = "rating")
+    var rating: List<Rating> = emptyList(),
+
+    @ColumnInfo(name = "response")
+    var response: String = "",
 
     @ColumnInfo(name = "timestamp")
     var timestamp: Int = 0
 
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.createTypedArrayList(Rating)!!,
+        parcel.readString()!!,
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(imdbID)
         parcel.writeString(title)
         parcel.writeString(year)
-        parcel.writeString(imdbID)
         parcel.writeString(type)
         parcel.writeString(poster)
+        parcel.writeString(rated)
+        parcel.writeString(runtime)
+        parcel.writeString(genre)
+        parcel.writeString(released)
+        parcel.writeString(plot)
+        parcel.writeString(director)
+        parcel.writeString(writer)
+        parcel.writeString(actor)
+        parcel.writeString(imdbRating)
+        parcel.writeString(metascore)
+        parcel.writeTypedList(rating)
+        parcel.writeString(response)
         parcel.writeInt(timestamp)
     }
 

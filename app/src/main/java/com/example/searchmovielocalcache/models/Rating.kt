@@ -2,42 +2,32 @@ package com.example.searchmovielocalcache.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "ratings")
+//@Entity(tableName = "ratings")
 data class Rating(
 
-    @PrimaryKey
-    @NotNull
-    val rating_id: Int,
+////    @PrimaryKey
+////    @NotNull
+//    val rating_id: Int,
 
-    @ColumnInfo(name = "source")
+    //@ColumnInfo(name = "source")
     @SerializedName("Source")
     val source: String = "",
 
-    @ColumnInfo(name = "value")
+    //@ColumnInfo(name = "value")
     @SerializedName("Value")
-    val value: String = "",
-
-    @ColumnInfo(name = "timestamp")
-    val timestamp: Int = 0
+    val value: String = ""
 
 ): Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
         parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readInt()
+        parcel.readString()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(source)
         parcel.writeString(value)
-        parcel.writeInt(timestamp)
     }
 
     override fun describeContents(): Int {

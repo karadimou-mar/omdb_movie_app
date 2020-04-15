@@ -1,6 +1,7 @@
 package com.example.searchmovielocalcache.requests
 
 import androidx.lifecycle.LiveData
+import com.example.searchmovielocalcache.models.Movie
 import com.example.searchmovielocalcache.requests.responses.ApiResponse
 import com.example.searchmovielocalcache.requests.responses.MovieDetailResponse
 import com.example.searchmovielocalcache.requests.responses.MovieSearchResponse
@@ -17,7 +18,7 @@ interface MovieApi {
     ): LiveData<ApiResponse<MovieSearchResponse>>
 
     @GET("/?plot=full")
-    fun getMovieDetails(
+    fun getMovieByTitle(
         @Query("t") title: String,
         @Query("apikey") apikey: String
     ): LiveData<ApiResponse<MovieDetailResponse>>

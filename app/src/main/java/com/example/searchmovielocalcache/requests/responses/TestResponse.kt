@@ -1,11 +1,13 @@
 package com.example.searchmovielocalcache.requests.responses
 
+import androidx.room.PrimaryKey
 import com.example.searchmovielocalcache.models.Rating
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class MovieDetailResponse(
+data class TestResponse (
 
+    @PrimaryKey
     @SerializedName("Title")
     @Expose
     var title: String = "",
@@ -61,4 +63,4 @@ data class MovieDetailResponse(
     @SerializedName("Response")
     @Expose
     var response: String = ""
-)
+    )

@@ -1,5 +1,6 @@
 package com.example.searchmovielocalcache.requests.responses
 
+import android.util.Log
 import retrofit2.Response
 import java.io.IOException
 
@@ -44,6 +45,7 @@ open class ApiResponse<T> {
     fun <T> create(response: Response<T>): ApiResponse<T> {
         if (response.isSuccessful) {
             val body: T = response.body()!!
+            Log.d("ApiResponse", "$body ")
 
             if (body is MovieSearchResponse){
                 if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieSearchResponse)){
@@ -52,12 +54,12 @@ open class ApiResponse<T> {
                 }
             }
 
-            if (body is MovieDetailResponse) {
-                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieDetailResponse)){
-                    val errorMessage = "Api key is invalid or expired"
-                    return ApiErrorResponse(errorMessage)
-                }
-            }
+//            if (body is MovieDetailResponse) {
+//                if (!CheckMovieApiKey.isMovieApiKeyValid(body as MovieDetailResponse)){
+//                    val errorMessage = "Api key is invalid or expired"
+//                    return ApiErrorResponse(errorMessage)
+//                }
+//            }
 
             // 204 code is empty response
             if (body == null || response.code() == 204) {

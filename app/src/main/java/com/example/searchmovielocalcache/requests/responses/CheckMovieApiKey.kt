@@ -8,7 +8,7 @@ object CheckMovieApiKey{
         return response.response == "True"
     }
 
-    internal fun isMovieApiKeyValid(response: MovieDetailResponse): Boolean{
-        return response.response == "True"
-    }
+//    internal fun isMovieApiKeyValid(response: MovieDetailResponse): Boolean{
+//        return response.response == "True"
+//    }
 }

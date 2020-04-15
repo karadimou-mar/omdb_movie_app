@@ -3,6 +3,7 @@ package com.example.searchmovielocalcache
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -29,7 +30,6 @@ class MainActivity : BaseActivity(), OnMovieListener {
         const val TAG = "MainActivity"
     }
 
-    // components
     private lateinit var mSearchView: SearchView
     private lateinit var mMainViewModel: MainViewModel
     private lateinit var mRecyclerView: RecyclerView
@@ -39,6 +39,8 @@ class MainActivity : BaseActivity(), OnMovieListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         initComponents()
         initSearchView()
@@ -80,7 +82,7 @@ class MainActivity : BaseActivity(), OnMovieListener {
                                 Log.d(TAG, "onChanged: cache has been refreshed")
                                 Log.d(
                                     TAG,
-                                    "onChanged: status: SUCCESS, #recipes: ${listResource.data.size}"
+                                    "onChanged: status: SUCCESS, #movies: ${listResource.data.size}"
                                 )
                                 mMovieAdapter.hideLoading()
                                 mMovieAdapter.setMovies(listResource.data as MutableList<Movie>)
@@ -150,7 +152,7 @@ class MainActivity : BaseActivity(), OnMovieListener {
 
                 if (mRecyclerView.canScrollVertically(1)
                     && mMainViewModel.getViewState().value == MainViewModel.ViewState.MOVIES){
-                    mMainViewModel.searchNextPagee()
+                    mMainViewModel.searchNextPage()
                 }
             }
         })
@@ -163,6 +165,9 @@ class MainActivity : BaseActivity(), OnMovieListener {
     }
 
     private fun initSearchView() {
+
+        mSearchView.isIconified = false
+
         mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchMovieApi(query!!)
@@ -187,7 +192,7 @@ class MainActivity : BaseActivity(), OnMovieListener {
     private fun initComponents() {
         mSearchView = findViewById(R.id.search_view)
         mRecyclerView = findViewById(R.id.movie_list)
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
     }
 
     override fun onMovieClick(position: Int) {

@@ -1,9 +1,11 @@
 package com.example.searchmovielocalcache.persistence
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.searchmovielocalcache.models.Movie
-import com.example.searchmovielocalcache.models.MovieDetail
 import com.example.searchmovielocalcache.models.Rating
 
 @Dao
@@ -18,27 +20,22 @@ interface MovieDao {
     fun insertMovies(movies: Array<Movie>): LongArray
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovieDetails(movie: MovieDetail)
-
+    fun insertMovieDetails(movie: Movie)
 
     // Custom update queries so timestamp don't get removed
-    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster WHERE imdbId = :imdbId")
-    fun updateMovie( title: String, year: String, type: String, poster: String, imdbId: String)
+    @Query("UPDATE movies SET title = :title, year = :year, type = :type, poster = :poster, plot = :plot WHERE imdbId = :imdbId")
+    fun updateMovie( title: String, year: String, type: String, poster: String, imdbId: String, plot: String)
 
-    @Query("UPDATE ratings SET source = :source, value = :value")
-    fun updateRating(source: String, value: String)
+//    @Query("UPDATE ratings SET source = :source, value = :value")
+//    fun updateRating(source: String, value: String)
 
-    @Query("UPDATE movie_detail SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore, imdbRating = :imdbRating, rating = :rating")
-    fun updateMovieDetails(rated: String, runtime: String, genre: String, released: String, plot: String, director: String, writer: String, actor: String, metascore: String, imdbRating: String, rating: List<Rating>)
+    @Query("UPDATE movies SET rated = :rated, runtime = :runtime, genre = :genre, released = :released, plot = :plot, director = :director, writer = :writer, actor = :actor, metascore = :metascore,  rating = :rating, imdbRating = :imdbRating WHERE title = :title")
+    fun updateMovieDetails(title:String,  rated: String, runtime: String, genre: String, released: String, plot: String, director: String,
+                           writer: String, actor: String, metascore: String, rating: List<Rating>, imdbRating: String)
 
     @Query("SELECT * FROM movies WHERE title LIKE '%' || :search || '%' ORDER BY year DESC LIMIT (:page * 10)")
     fun searchMovies(search: String, page: Int): LiveData<List<Movie>>
 
-    @Query("SELECT * FROM movie_detail WHERE detailId = :detailId")
-    fun getMovie(detailId: String): LiveData<MovieDetail>
-
-
-
-
-
+    @Query("SELECT * FROM movies WHERE title = :title")
+    fun getMovieByTitle(title: String): LiveData<Movie>
 }

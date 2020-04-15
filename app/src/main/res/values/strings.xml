@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Search Movie </string>
     <string name="no_more_results">No more results!</string>
+    <string name="title">Title</string>
+    <string name="plot">Plot</string>
+    <string name="written_by">Written by</string>
+    <string name="starring">Starring</string>
+    <string name="directed_by">Directed by</string>
+    <string name="scores">Scores</string>
 </resources>

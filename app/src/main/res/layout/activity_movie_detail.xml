@@ -1,9 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MovieDetailActivity">
+    android:visibility="gone">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/movie_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/movie_image_height"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_image"
+            android:padding="7dp"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/details_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_title"
+            android:orientation="vertical"
+            android:padding="10dp">
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/movie_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scores"
+            android:layout_below="@+id/details_container"
+            android:padding="7dp"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/score_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_score"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/imdb_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:textSize="@dimen/small_text_size"/>
+
+            <TextView
+                android:id="@+id/rt_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:gravity="center"
+                android:textSize="@dimen/small_text_size" />
+
+            <TextView
+                android:id="@+id/ms_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:gravity="center"
+                android:textSize="@dimen/small_text_size" />
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/movie_plot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/score_container"
+            android:padding="7dp"
+            android:text="@string/plot"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/plot_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_plot"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/movie_director"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/plot_container"
+            android:padding="7dp"
+            android:text="@string/directed_by"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/director_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_director"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/movie_writer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/director_container"
+            android:padding="7dp"
+            android:text="@string/written_by"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/writer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_writer"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/movie_actor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/writer_container"
+            android:padding="7dp"
+            android:text="@string/starring"
+            android:textColor="#000"
+            android:textSize="@dimen/text_size" />
+
+        <LinearLayout
+            android:id="@+id/actor_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_actor"
+            android:orientation="vertical"
+            android:padding="10dp">
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

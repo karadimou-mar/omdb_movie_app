@@ -2,12 +2,10 @@ package com.example.searchmovielocalcache.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.core.os.persistableBundleOf
 import androidx.lifecycle.*
 import com.example.searchmovielocalcache.models.Movie
 import com.example.searchmovielocalcache.repository.MovieRepository
 import com.example.searchmovielocalcache.utils.Resource
-import java.lang.RuntimeException
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
 
@@ -25,6 +23,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private var mPageNumber: Int = 0
     private var mSearch: String = ""
     private var requestStartTime: Long = 0L
+
 
     init {
         initState()
@@ -61,7 +60,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun searchNextPagee(){
+    fun searchNextPage(){
         if (!isPerformingQuery && !isQueryExhausted){
             mPageNumber++
             executeSearch()
@@ -116,7 +115,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
 
         })
-
     }
 
     fun setViewInitImage(){
